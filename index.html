@@ -82,6 +82,12 @@
             <a href="#rsvp" class="inline-block bg-wedding-rose text-white px-10 py-4 rounded-full hover:bg-yellow-600 transition duration-300 font-serif text-xl shadow-xl hover:scale-105 transform">
                 Confirmar Presença
             </a>
+            
+            <!-- Novo botão sofisticado para o Local -->
+            <a href="#local" class="mt-8 flex flex-col items-center justify-center gap-2 text-white/90 hover:text-wedding-rose transition duration-300 font-serif text-lg group w-fit mx-auto">
+                <span class="tracking-widest uppercase text-sm">Ver Local da Cerimônia</span>
+                <svg class="w-6 h-6 group-hover:translate-y-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
         </div>
     </header>
 
@@ -126,7 +132,7 @@
     </section>
 
     <!-- Detalhes do Evento -->
-    <section class="bg-white py-24 px-4 border-t border-gray-100">
+    <section id="local" class="bg-white py-24 px-4 border-t border-gray-100">
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="text-4xl md:text-5xl font-serif text-wedding-rose mb-16">Quando & Onde</h2>
             
@@ -228,7 +234,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. SAUDAÇÃO PERSONALIZADA VIA URL (ex: ?nome=Família Silva)
+            // === ATENÇÃO: COLE A URL DO SEU GOOGLE APPS SCRIPT AQUI ABAIXO ===
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzKV70DFlXvsIn-fR7oq3JaR20htwapXZU1iMnSieZ2Up1fE3_zmHVlVmKpF80ToTXO/exec';
+
+            // 1. SAUDAÇÃO PERSONALIZADA VIA URL (ex: ?nome=André Pirôpo dos Santos)
             const urlParams = new URLSearchParams(window.location.search);
             const nomeConvidado = urlParams.get('nome');
             
@@ -240,11 +249,33 @@
                 // Preenche automaticamente o nome no formulário
                 const formNameInput = document.getElementById('form-name');
                 if(formNameInput) formNameInput.value = nomeConvidado;
+
+                // VERIFICA NA PLANILHA SE A PESSOA JÁ CONFIRMOU (se a URL já foi colocada)
+                if (scriptURL !== 'https://script.google.com/macros/s/AKfycbzKV70DFlXvsIn-fR7oq3JaR20htwapXZU1iMnSieZ2Up1fE3_zmHVlVmKpF80ToTXO/exec') {
+                    // Faz uma busca (GET) silenciosa para ver o status
+                    fetch(scriptURL + "?nome=" + encodeURIComponent(nomeConvidado))
+                        .then(response => response.json())
+                        .then(data => {
+                            // Se a planilha disser que já está confirmado, bloqueia o formulário e avisa
+                            if (data.encontrado && data.status === "Confirmado") {
+                                document.getElementById('rsvp-form').classList.add('hidden');
+                                const successDiv = document.getElementById('form-success');
+                                successDiv.classList.remove('hidden');
+                                successDiv.innerHTML = `
+                                    <div class="w-16 h-16 bg-wedding-rose text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <h3 class="text-2xl font-serif text-gray-800 mb-2">Presença Confirmada!</h3>
+                                    <p class="text-gray-600 text-lg"><b>${nomeConvidado}</b>, você já confirmou sua presença anteriormente. Estamos muito felizes e te esperamos lá!</p>
+                                `;
+                            }
+                            // Se estiver "Recusado" ou vazio, deixa o formulário aparecer normalmente
+                        })
+                        .catch(err => console.log("Verificação de status falhou (normal se a URL for provisória):", err));
+                }
             }
 
             // 2. CONTADOR REGRESSIVO
-            // Data do casamento: 12 de Dezembro de 2026 às 16:00
-            // Mês no JS começa em 0 (Janeiro = 0, Dezembro = 11)
             const dataCasamento = new Date(2026, 11, 12, 16, 0, 0).getTime();
 
             const atualizarContador = setInterval(() => {
@@ -272,38 +303,28 @@
             const formSuccess = document.getElementById('form-success');
             const formError = document.getElementById('form-error');
 
-            // === ATENÇÃO: COLE A URL DO SEU GOOGLE APPS SCRIPT AQUI ABAIXO ===
-            // Substitua esta URL genérica pela sua URL verdadeira após seguir o passo a passo.
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbykWIsznON-2FPT4oZE80LPkS37dBH5VdUgGVzZRvtEdz3TaybE8IYOlfraW6c3MGkZ/exec';
-
             form.addEventListener('submit', e => {
                 e.preventDefault();
                 
-                // Impede múltiplos cliques alterando o botão
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
                 btnText.innerHTML = '<span class="loading-spinner"></span> Enviando...';
 
-                // Coleta os dados do formulário
                 const formData = new FormData(form);
 
-                // Envia para o Google Sheets
                 fetch(scriptURL, { 
                     method: 'POST', 
                     body: formData,
-                    mode: 'no-cors' // Necessário para evitar erro de segurança de domínio no GitHub Pages
+                    mode: 'no-cors' 
                 })
                 .then(response => {
-                    // Como estamos usando 'no-cors', o response não retorna status legível,
-                    // então assumimos sucesso se a requisição foi completada.
-                    form.classList.add('hidden'); // Esconde o formulário
-                    formSuccess.classList.remove('hidden'); // Mostra a mensagem de agradecimento
+                    form.classList.add('hidden'); 
+                    formSuccess.classList.remove('hidden'); 
                 })
                 .catch(error => {
                     console.error('Erro!', error.message);
-                    formError.classList.remove('hidden'); // Mostra erro
+                    formError.classList.remove('hidden'); 
                     
-                    // Restaura o botão
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
                     btnText.innerText = 'Confirmar Presença';
