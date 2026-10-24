@@ -214,7 +214,7 @@
                     
                     <!-- CAIXA DO QR CODE (Fica escondida até a pessoa clicar em "Sim") -->
                     <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose rounded-xl bg-yellow-50">
-                        <p class="text-sm text-gray-700 mb-4 font-medium">Escaneie o QR Code abaixo ou use a nossa chave PIX:<br><strong class="text-lg">(71)9 9250-0268</strong></p>
+                        <p class="text-sm text-gray-700 mb-4 font-medium">Escaneie o QR Code abaixo ou use a nossa chave PIX:<br><strong class="text-lg">suachave@email.com</strong></p>
                         <!-- É AQUI QUE ELE PUXA A IMAGEM pix.png DA SUA PASTA -->
                         <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-lg rounded-xl object-cover">
                         <p class="text-xs text-gray-500 mt-4">Agradecemos de coração pelo carinho!</p>
@@ -259,7 +259,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // === ATENÇÃO: COLE A URL DO SEU GOOGLE APPS SCRIPT AQUI ABAIXO ===
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzKV70DFlXvsIn-fR7oq3JaR20htwapXZU1iMnSieZ2Up1fE3_zmHVlVmKpF80ToTXO/exec';
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec';
 
             // 1. SAUDAÇÃO PERSONALIZADA VIA URL (ex: ?nome=André Pirôpo dos Santos)
             const urlParams = new URLSearchParams(window.location.search);
@@ -275,7 +275,7 @@
                 if(formNameInput) formNameInput.value = nomeConvidado;
 
                 // VERIFICA NA PLANILHA SE A PESSOA JÁ CONFIRMOU (se a URL já foi colocada)
-                if (scriptURL !== 'https://script.google.com/macros/s/AKfycbzKV70DFlXvsIn-fR7oq3JaR20htwapXZU1iMnSieZ2Up1fE3_zmHVlVmKpF80ToTXO/exec') {
+                if (scriptURL !== 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec') {
                     // Faz uma busca (GET) silenciosa para ver o status
                     fetch(scriptURL + "?nome=" + encodeURIComponent(nomeConvidado))
                         .then(response => response.json())
