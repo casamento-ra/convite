@@ -40,8 +40,8 @@
             100% { opacity: 1; transform: translateY(0); }
         }
         .bg-hero {
-            /* PARA O SEU SITE REAL: Troque a URL abaixo para o nome da sua foto de fundo, ou deixe uma foto da internet temporariamente */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            /* AQUI: O fundo agora busca o arquivo "fundo.jpg" que você vai colocar na pasta */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('fundo.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -117,16 +117,19 @@
             <p class="max-w-2xl mx-auto text-gray-600 text-lg">Cada momento nos trouxe até aqui. Compartilhamos com vocês algumas das nossas lembranças favoritas enquanto aguardamos o grande dia.</p>
         </div>
 
-        <!-- Grade de Fotos -->
+        <!-- Grade de Fotos: Agora buscando arquivos do seu computador -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Casal 1" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                <!-- AQUI: foto1.jpg -->
+                <img src="foto1.jpg" alt="Casal Foto 1" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
             </div>
             <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Casal 2" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                <!-- AQUI: foto2.jpg -->
+                <img src="foto2.jpg" alt="Casal Foto 2" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
             </div>
             <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Casal 3" class="w-full h-full object-cover hover:scale-110 transition duration-700">
+                <!-- AQUI: foto3.jpg -->
+                <img src="foto3.jpg" alt="Casal Foto 3" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
             </div>
         </div>
     </section>
@@ -136,7 +139,7 @@
         <div class="max-w-5xl mx-auto text-center">
             <h2 class="text-4xl md:text-5xl font-serif text-wedding-rose mb-16">Quando & Onde</h2>
             
-            <div class="flex flex-col md:flex-row justify-center gap-12 md:gap-24">
+            <div class="flex flex-col md:flex-row justify-center gap-12 md:gap-24 mb-16">
                 <!-- Cerimônia -->
                 <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm hover:shadow-md transition duration-300">
                     <div class="w-16 h-16 mx-auto bg-wedding-rose text-white rounded-full flex items-center justify-center mb-6 shadow-inner">
@@ -161,6 +164,25 @@
                     <p class="text-gray-500 mt-4">No mesmo endereço da Igreja</p>
                 </div>
             </div>
+
+            <!-- Mapa do Google Interativo -->
+            <div class="max-w-4xl mx-auto bg-wedding-bg p-4 rounded-3xl shadow-sm border border-gray-100">
+                <iframe 
+                    class="w-full h-80 rounded-2xl" 
+                    src="https://maps.google.com/maps?q=Igreja%20Batista%20Casa%20de%20Ora%C3%A7%C3%A3o%2C%20R.%20S%C3%A3o%20Crist%C3%B3v%C3%A3o%2C%2031%20-%20Liberdade%2C%20Salvador%20-%20BA&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    marginheight="0" 
+                    marginwidth="0">
+                </iframe>
+                <div class="mt-6 mb-2">
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Igreja+Batista+Casa+de+Oração,+R.+São+Cristóvão,+31+-+Liberdade,+Salvador+-+BA" target="_blank" class="inline-flex items-center justify-center gap-2 bg-gray-800 text-white px-8 py-4 rounded-full hover:bg-wedding-rose transition duration-300 font-sans font-medium text-sm md:text-base shadow-md hover:scale-105 transform">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Traçar Rota no GPS
+                    </a>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -176,7 +198,7 @@
                 <p class="text-yellow-800 text-lg font-medium">Para confirmar sua presença, por favor acesse utilizando o link personalizado que enviamos para você no WhatsApp.</p>
             </div>
 
-            <!-- FORMULÁRIO CONECTADO AO GOOGLE SHEETS -->
+            <!-- FORMULÁRIO -->
             <form id="rsvp-form" class="space-y-6">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
@@ -198,7 +220,6 @@
                     </div>
                 </div>
 
-                <!-- SESSÃO DO PIX (Substituindo definitivamente a de Adultos) -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Você gostaria de enviar um Pix para o casal?</label>
                     <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
@@ -212,11 +233,10 @@
                         </label>
                     </div>
                     
-                    <!-- CAIXA DO QR CODE (Fica escondida até a pessoa clicar em "Sim") -->
                     <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose rounded-xl bg-yellow-50">
-                        <p class="text-sm text-gray-700 mb-4 font-medium">Escaneie o QR Code abaixo ou use a nossa chave PIX:<br><strong class="text-lg">(71) 992500268</strong></p>
-                        <!-- É AQUI QUE ELE PUXA A IMAGEM pix.png DA SUA PASTA -->
-                        <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-lg rounded-xl object-cover">
+                        <p class="text-sm text-gray-700 mb-4 font-medium">Escaneie o QR Code abaixo ou use a nossa chave PIX:<br><strong class="text-lg">celular-ou-email@pix.com.br</strong></p>
+                        <!-- AQUI: pix.png -->
+                        <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-lg rounded-xl object-cover bg-white">
                         <p class="text-xs text-gray-500 mt-4">Agradecemos de coração pelo carinho!</p>
                     </div>
                 </div>
@@ -231,7 +251,7 @@
                 </button>
             </form>
             
-            <!-- Mensagem de Sucesso -->
+            <!-- Mensagens de Feedback -->
             <div id="form-success" class="hidden text-center mt-8 p-8 bg-green-50 border border-green-100 rounded-2xl">
                 <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -240,7 +260,6 @@
                 <p class="text-green-700">Sua resposta foi registrada com sucesso.</p>
             </div>
 
-            <!-- Mensagem de Erro -->
             <div id="form-error" class="hidden text-center mt-8 p-6 bg-red-50 border border-red-100 rounded-2xl">
                 <p class="text-red-600">Ops! Ocorreu um erro ao enviar. Tente novamente mais tarde.</p>
             </div>
@@ -254,35 +273,31 @@
         <p class="text-xs text-gray-500 mt-8">Criado com amor para o nosso grande dia.</p>
     </footer>
 
-    <!-- Lógica JavaScript (Personalização, Contador e Envio p/ Planilha) -->
+    <!-- Lógica JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // === ATENÇÃO: COLE A URL DO SEU GOOGLE APPS SCRIPT AQUI ABAIXO ===
+            // Lembre-se de colar a sua URL correta do Google Script aqui!
             const scriptURL = 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec';
 
-            // 1. SAUDAÇÃO PERSONALIZADA VIA URL (ex: ?nome=André Pirôpo dos Santos)
             const urlParams = new URLSearchParams(window.location.search);
             const nomeConvidado = urlParams.get('nome');
+            const form = document.getElementById('rsvp-form');
             
             if (nomeConvidado) {
                 document.getElementById('guest-name').innerText = nomeConvidado;
                 document.getElementById('guest-greeting').classList.remove('hidden');
                 document.getElementById('default-greeting').classList.add('hidden');
                 
-                // Preenche automaticamente o nome no formulário
                 const formNameInput = document.getElementById('form-name');
                 if(formNameInput) formNameInput.value = nomeConvidado;
 
-                // VERIFICA NA PLANILHA SE A PESSOA JÁ CONFIRMOU (se a URL já foi colocada)
                 if (scriptURL !== 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec') {
-                    // Faz uma busca (GET) silenciosa para ver o status
                     fetch(scriptURL + "?nome=" + encodeURIComponent(nomeConvidado))
                         .then(response => response.json())
                         .then(data => {
-                            // Se a planilha disser que já está confirmado, bloqueia o formulário e avisa
                             if (data.encontrado && data.status === "Confirmado") {
-                                document.getElementById('rsvp-form').classList.add('hidden');
+                                form.classList.add('hidden');
                                 const successDiv = document.getElementById('form-success');
                                 successDiv.classList.remove('hidden');
                                 successDiv.innerHTML = `
@@ -293,39 +308,30 @@
                                     <p class="text-gray-600 text-lg"><b>${nomeConvidado}</b>, você já confirmou sua presença anteriormente. Estamos muito felizes e te esperamos lá!</p>
                                 `;
                             }
-                            // Se estiver "Recusado" ou vazio, deixa o formulário aparecer normalmente
                         })
-                        .catch(err => console.log("Verificação de status falhou (normal se a URL for provisória):", err));
+                        .catch(err => console.log("Verificação falhou", err));
                 }
             } else {
-                // SE A PESSOA ENTRAR SEM NOME NO LINK, ESCONDE O FORMULÁRIO E MOSTRA O AVISO
-                document.getElementById('rsvp-form').classList.add('hidden');
+                form.classList.add('hidden');
                 document.getElementById('no-name-warning').classList.remove('hidden');
             }
 
-            // 2. CONTADOR REGRESSIVO
+            // Contador
             const dataCasamento = new Date(2026, 11, 12, 16, 0, 0).getTime();
-
             const atualizarContador = setInterval(() => {
                 const agora = new Date().getTime();
                 const diferenca = dataCasamento - agora;
-
                 if (diferenca > 0) {
-                    const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-                    const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
-
-                    document.getElementById('dias').innerText = dias.toString().padStart(2, '0');
-                    document.getElementById('horas').innerText = horas.toString().padStart(2, '0');
-                    document.getElementById('minutos').innerText = minutos.toString().padStart(2, '0');
+                    document.getElementById('dias').innerText = Math.floor(diferenca / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                    document.getElementById('horas').innerText = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                    document.getElementById('minutos').innerText = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
                 } else {
                     clearInterval(atualizarContador);
                     document.getElementById('countdown').innerHTML = "<span class='text-4xl font-serif text-wedding-rose'>Chegou o grande dia!</span>";
                 }
             }, 1000);
 
-            // 3. ENVIO DO FORMULÁRIO PARA O GOOGLE SHEETS
-            const form = document.getElementById('rsvp-form');
+            // Envio do Form
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
             const formSuccess = document.getElementById('form-success');
@@ -333,26 +339,18 @@
 
             form.addEventListener('submit', e => {
                 e.preventDefault();
-                
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
                 btnText.innerHTML = '<span class="loading-spinner"></span> Enviando...';
 
                 const formData = new FormData(form);
-
-                fetch(scriptURL, { 
-                    method: 'POST', 
-                    body: formData,
-                    mode: 'no-cors' 
-                })
-                .then(response => {
+                fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
+                .then(() => {
                     form.classList.add('hidden'); 
                     formSuccess.classList.remove('hidden'); 
                 })
-                .catch(error => {
-                    console.error('Erro!', error.message);
+                .catch(() => {
                     formError.classList.remove('hidden'); 
-                    
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
                     btnText.innerText = 'Confirmar Presença';
