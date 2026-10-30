@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casamento - Amanda & Rafael</title>
+    <title>Casamento - Rafael & Amanda</title>
     
-    <!-- Tailwind CSS para estilização rápida e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fontes do Google: Playfair Display (elegante/títulos) e Lora (textos) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Adicionei a fonte Pinyon Script aqui na importação do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'wedding-rose': '#D4AF37', // Dourado suave
-                        'wedding-bg': '#FDFBF7', // Off-white/creme
+                        'wedding-rose': '#d28781',
+                        'wedding-bg': '#FDFBF7',
                         'wedding-text': '#4A4A4A'
                     },
                     fontFamily: {
                         'serif': ['"Playfair Display"', 'serif'],
                         'sans': ['"Lora"', 'serif'],
+                        'pinyon': ['"Pinyon Script"', 'cursive'] // Nova fonte configurada
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Estilos adicionais para animações suaves */
+        body {
+            overflow: hidden; 
+        }
         .fade-in {
             animation: fadeIn 2s ease-in;
         }
@@ -40,13 +41,24 @@
             100% { opacity: 1; transform: translateY(0); }
         }
         .bg-hero {
-            /* AQUI: O fundo agora busca o arquivo "fundo.jpg" que você vai colocar na pasta */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('fundo.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('fundo.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
         }
-        /* Efeito de carregamento para o botão */
+        @media (min-width: 768px) {
+            .bg-hero { background-attachment: fixed; }
+        }
+        
+        .envelope-bg {
+            background-image: url('envelope-mobile.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        @media (min-width: 768px) {
+            .envelope-bg { background-image: url('envelope-pc.jpg'); }
+        }
+
         .loading-spinner {
             border: 3px solid rgba(255,255,255,0.3);
             border-radius: 50%;
@@ -62,228 +74,331 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .golden-ticket {
+            background: linear-gradient(135deg, #fdfbf7 0%, #f9ecea 100%);
+            border: 2px dashed #d28781;
+            position: relative;
+        }
+        .golden-ticket::before, .golden-ticket::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: #f0fdf4;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        .golden-ticket::before { left: -10px; border-right: 2px dashed #d28781; }
+        .golden-ticket::after { right: -10px; border-left: 2px dashed #d28781; }
+
+        /* Novas animações e estilos para as fotos */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+        .polaroid {
+            background: white;
+            padding: 12px 12px 35px 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease-out;
+        }
+        .polaroid:hover {
+            transform: scale(1.08) rotate(0deg) !important;
+            z-index: 20;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body class="bg-wedding-bg text-wedding-text font-sans antialiased">
 
-    <!-- Seção Principal (Hero) -->
-    <header class="h-screen w-full bg-hero flex flex-col items-center justify-center text-center text-white px-4">
-        <div class="fade-in">
-            <!-- Saudação Personalizada via URL -->
-            <div id="guest-greeting" class="hidden mb-6">
-                <p class="text-xl md:text-2xl font-light italic opacity-90">Com muita alegria, convidamos</p>
-                <h2 id="guest-name" class="text-3xl md:text-5xl font-serif mt-3 text-wedding-rose font-bold drop-shadow-md">Nome do Convidado</h2>
+    <!-- INSTRUÇÃO INICIAL -->
+    <div id="instruction-overlay" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-500 px-4">
+        <div class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl text-center max-w-sm transform transition-all">
+            <div class="w-16 h-16 mx-auto bg-wedding-rose/10 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-wedding-rose" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
             </div>
-            
-            <p id="default-greeting" class="text-lg tracking-widest uppercase mb-4">Para celebrar o casamento de</p>
-            <h1 class="text-6xl md:text-8xl font-serif mb-6">Amanda & Rafael</h1>
-            <p class="text-2xl md:text-3xl italic mb-8 font-serif text-wedding-rose">12 de Dezembro de 2026</p>
-            
-            <a href="#rsvp" class="inline-block bg-wedding-rose text-white px-10 py-4 rounded-full hover:bg-yellow-600 transition duration-300 font-serif text-xl shadow-xl hover:scale-105 transform">
-                Confirmar Presença
-            </a>
-            
-            <!-- Novo botão sofisticado para o Local -->
-            <a href="#local" class="mt-8 flex flex-col items-center justify-center gap-2 text-white/90 hover:text-wedding-rose transition duration-300 font-serif text-lg group w-fit mx-auto">
-                <span class="tracking-widest uppercase text-sm">Ver Local da Cerimônia</span>
-                <svg class="w-6 h-6 group-hover:translate-y-2 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-            </a>
+            <h3 class="text-3xl font-serif text-wedding-rose mb-3">Seu convite chegou!</h3>
+            <p class="text-gray-600 text-lg mb-8">Para abrir, toque no laço do envelope na próxima tela.</p>
+            <button id="close-instruction-btn" class="w-full bg-wedding-rose text-white px-8 py-4 rounded-xl hover:opacity-90 transition duration-300 font-serif text-xl shadow-lg hover:scale-105 transform">
+                Entendi
+            </button>
         </div>
-    </header>
+    </div>
 
-    <!-- Contador Regressivo -->
-    <section class="py-16 px-4 max-w-4xl mx-auto text-center border-b border-gray-200">
-        <h3 class="text-3xl font-serif text-wedding-rose mb-8">Contagem Regressiva</h3>
-        <div class="flex justify-center gap-6 md:gap-12 text-center" id="countdown">
-            <div class="flex flex-col bg-white p-4 rounded-lg shadow-sm w-24 md:w-32">
-                <span class="text-4xl md:text-6xl font-serif text-gray-800" id="dias">00</span>
-                <span class="text-xs md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Dias</span>
-            </div>
-            <div class="flex flex-col bg-white p-4 rounded-lg shadow-sm w-24 md:w-32">
-                <span class="text-4xl md:text-6xl font-serif text-gray-800" id="horas">00</span>
-                <span class="text-xs md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Horas</span>
-            </div>
-            <div class="flex flex-col bg-white p-4 rounded-lg shadow-sm w-24 md:w-32">
-                <span class="text-4xl md:text-6xl font-serif text-gray-800" id="minutos">00</span>
-                <span class="text-xs md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Min</span>
-            </div>
-        </div>
-    </section>
+    <!-- CARTA / ENVELOPE INICIAL -->
+    <div id="envelope-overlay" class="fixed inset-0 z-50 flex items-center justify-center transition-transform duration-[1500ms] ease-in-out bg-wedding-bg">
+        <div class="absolute inset-0 envelope-bg"></div>
+        
+        <!-- Botão invisível ocupando a metade de baixo da tela -->
+        <button id="open-btn" class="absolute bottom-0 w-full h-1/2 cursor-pointer z-10" aria-label="Abrir convite"></button>
+    </div>
 
-    <!-- Nossa História (Galeria de Imagens) -->
-    <section class="py-20 px-4 max-w-6xl mx-auto" id="historia">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-serif text-wedding-rose mb-4">Nossa História</h2>
-            <p class="max-w-2xl mx-auto text-gray-600 text-lg">Cada momento nos trouxe até aqui. Compartilhamos com vocês algumas das nossas lembranças favoritas enquanto aguardamos o grande dia.</p>
-        </div>
-
-        <!-- Grade de Fotos: Agora buscando arquivos do seu computador -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <!-- AQUI: foto1.jpg -->
-                <img src="foto1.jpg" alt="Casal Foto 1" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
-            </div>
-            <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <!-- AQUI: foto2.jpg -->
-                <img src="foto2.jpg" alt="Casal Foto 2" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
-            </div>
-            <div class="overflow-hidden rounded-xl shadow-lg h-96">
-                <!-- AQUI: foto3.jpg -->
-                <img src="foto3.jpg" alt="Casal Foto 3" class="w-full h-full object-cover hover:scale-110 transition duration-700 bg-gray-200">
-            </div>
-        </div>
-    </section>
-
-    <!-- Detalhes do Evento -->
-    <section id="local" class="bg-white py-24 px-4 border-t border-gray-100">
-        <div class="max-w-5xl mx-auto text-center">
-            <h2 class="text-4xl md:text-5xl font-serif text-wedding-rose mb-16">Quando & Onde</h2>
-            
-            <div class="flex flex-col md:flex-row justify-center gap-12 md:gap-24 mb-16">
-                <!-- Cerimônia -->
-                <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm hover:shadow-md transition duration-300">
-                    <div class="w-16 h-16 mx-auto bg-wedding-rose text-white rounded-full flex items-center justify-center mb-6 shadow-inner">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"></path></svg>
-                    </div>
-                    <h4 class="text-3xl font-serif mb-4 text-gray-800">A Cerimônia</h4>
-                    <p class="font-bold text-lg mb-4 text-wedding-rose">12 de Dezembro de 2026, às 16:00</p>
-                    <p class="text-gray-700 text-lg mb-1 font-medium">Igreja Batista Casa de Oração</p>
-                    <p class="text-gray-600 mb-1">Cerimônia no 1º Andar</p>
-                    <p class="text-gray-500 mt-4">Rua São Cristóvão, 31<br>Bairro Liberdade - BA</p>
+    <!-- CONTEÚDO DO SITE -->
+    <div id="main-content">
+        <header class="h-screen w-full bg-hero flex flex-col items-center justify-center text-center text-white px-4">
+            <div class="fade-in">
+                <div id="guest-greeting" class="hidden mb-6">
+                    <p class="text-xl md:text-2xl font-light italic opacity-90">Com muita alegria, convidamos</p>
+                    <h2 id="guest-name" class="text-3xl md:text-5xl font-serif mt-3 text-wedding-rose font-bold drop-shadow-md">Nome do Convidado</h2>
                 </div>
                 
-                <!-- Recepção -->
-                <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm hover:shadow-md transition duration-300">
-                    <div class="w-16 h-16 mx-auto bg-wedding-rose text-white rounded-full flex items-center justify-center mb-6 shadow-inner">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"></path></svg>
-                    </div>
-                    <h4 class="text-3xl font-serif mb-4 text-gray-800">A Recepção</h4>
-                    <p class="font-bold text-lg mb-4 text-wedding-rose">Logo após a cerimônia</p>
-                    <p class="text-gray-700 text-lg mb-1 font-medium">Salão de Eventos</p>
-                    <p class="text-gray-600 mb-1">Localizado no Térreo</p>
-                    <p class="text-gray-500 mt-4">No mesmo endereço da Igreja</p>
-                </div>
-            </div>
-
-            <!-- Mapa do Google Interativo -->
-            <div class="max-w-4xl mx-auto bg-wedding-bg p-4 rounded-3xl shadow-sm border border-gray-100">
-                <iframe 
-                    class="w-full h-80 rounded-2xl" 
-                    src="https://maps.google.com/maps?q=Igreja%20Batista%20Casa%20de%20Ora%C3%A7%C3%A3o%2C%20R.%20S%C3%A3o%20Crist%C3%B3v%C3%A3o%2C%2031%20-%20Liberdade%2C%20Salvador%20-%20BA&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    marginheight="0" 
-                    marginwidth="0">
-                </iframe>
-                <div class="mt-6 mb-2">
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=Igreja+Batista+Casa+de+Oração,+R.+São+Cristóvão,+31+-+Liberdade,+Salvador+-+BA" target="_blank" class="inline-flex items-center justify-center gap-2 bg-gray-800 text-white px-8 py-4 rounded-full hover:bg-wedding-rose transition duration-300 font-sans font-medium text-sm md:text-base shadow-md hover:scale-105 transform">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        Traçar Rota no GPS
+                <p id="default-greeting" class="text-lg tracking-widest uppercase mb-4">Para celebrar o casamento de</p>
+                <!-- Fonte Pinyon Script aplicada aqui e nomes invertidos -->
+                <h1 class="text-7xl md:text-9xl font-pinyon mb-6 drop-shadow-lg">Rafael e Amanda</h1>
+                <p class="text-2xl md:text-6xl italic mb-8 font-serif text-wedding-rose drop-shadow-md">12 de Dezembro de 2026</p>
+                
+                <div class="flex flex-col items-center gap-5 mt-4">
+                    <a href="#rsvp" class="inline-block bg-wedding-rose text-white px-10 py-4 rounded-full hover:opacity-90 transition duration-300 font-serif text-xl shadow-xl hover:scale-105 transform">
+                        Confirmar Presença
+                    </a>
+                    
+                    <a href="#local" class="inline-flex items-center gap-2 text-white/90 hover:text-white hover:text-wedding-rose transition duration-300 font-sans font-medium text-sm tracking-wide group">
+                        Ver local da cerimônia
+                        <svg class="w-4 h-4 animate-bounce mt-1 text-wedding-rose group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
                     </a>
                 </div>
             </div>
+        </header>
 
-        </div>
-    </section>
-
-    <!-- RSVP (Confirmação de Presença) -->
-    <section id="rsvp" class="py-24 px-4 bg-gray-50">
-        <div class="max-w-xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100">
-            <h2 class="text-4xl font-serif text-center text-wedding-rose mb-3">Confirme sua Presença</h2>
-            <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Novembro de 2026</p>
-            
-            <!-- MENSAGEM PARA QUEM ACESSAR SEM O LINK PERSONALIZADO -->
-            <div id="no-name-warning" class="hidden text-center p-8 bg-yellow-50 border border-yellow-200 rounded-2xl mb-8">
-                <svg class="w-12 h-12 text-yellow-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                <p class="text-yellow-800 text-lg font-medium">Para confirmar sua presença, por favor acesse utilizando o link personalizado que enviamos para você no WhatsApp.</p>
+        <section class="py-16 px-2 max-w-4xl mx-auto text-center border-b border-gray-200">
+            <h3 class="text-3xl font-serif text-wedding-rose mb-8">Contagem Regressiva</h3>
+            <div class="flex justify-center gap-2 md:gap-8 text-center" id="countdown">
+                <div class="flex flex-col bg-white p-3 md:p-4 rounded-lg shadow-sm w-20 md:w-28 border border-gray-100">
+                    <span class="text-3xl md:text-5xl font-serif text-gray-800" id="dias">00</span>
+                    <span class="text-[10px] md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Dias</span>
+                </div>
+                <div class="flex flex-col bg-white p-3 md:p-4 rounded-lg shadow-sm w-20 md:w-28 border border-gray-100">
+                    <span class="text-3xl md:text-5xl font-serif text-gray-800" id="horas">00</span>
+                    <span class="text-[10px] md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Horas</span>
+                </div>
+                <div class="flex flex-col bg-white p-3 md:p-4 rounded-lg shadow-sm w-20 md:w-28 border border-gray-100">
+                    <span class="text-3xl md:text-5xl font-serif text-gray-800" id="minutos">00</span>
+                    <span class="text-[10px] md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Min</span>
+                </div>
+                <div class="flex flex-col bg-white p-3 md:p-4 rounded-lg shadow-sm w-20 md:w-28 border border-gray-100">
+                    <span class="text-3xl md:text-5xl font-serif text-gray-800" id="segundos">00</span>
+                    <span class="text-[10px] md:text-sm uppercase tracking-wider text-gray-500 mt-2 font-bold">Seg</span>
+                </div>
             </div>
+        </section>
 
-            <!-- FORMULÁRIO -->
-            <form id="rsvp-form" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
-                    <input type="text" name="nome" id="form-name" readonly required class="w-full px-5 py-4 bg-gray-200 border border-gray-300 rounded-xl focus:outline-none cursor-not-allowed text-gray-600 font-semibold" placeholder="Seu nome aparecerá aqui automaticamente">
-                    <p class="text-xs text-gray-500 mt-1">Identificação automática baseada no seu convite exclusivo.</p>
+        <section class="py-20 px-4 max-w-6xl mx-auto" id="historia">
+            <div class="text-center mb-12">
+                <h2 class="text-6xl font-pinyon text-wedding-rose mb-4">Nossa História</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 text-lg">Cada momento nos trouxe até aqui. Compartilhamos com vocês algumas das nossas lembranças favoritas enquanto aguardamos o grande dia.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 md:px-8">
+                <div class="polaroid transform -rotate-2">
+                    <img src="foto1.jpg" alt="Casal Foto 1" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
                 </div>
+                <div class="polaroid transform rotate-2 mt-4 md:mt-0">
+                    <img src="foto2.jpg" alt="Casal Foto 2" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
+                </div>
+                <div class="polaroid transform -rotate-1 mt-4 md:mt-0">
+                    <img src="foto3.jpg" alt="Casal Foto 3" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
+                </div>
+            </div>
+        </section>
+
+        <section id="local" class="bg-white py-24 px-4 border-t border-gray-100">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-serif text-wedding-rose mb-16">Quando & Onde</h2>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Você poderá comparecer?</label>
-                    <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="presenca" value="Sim" required class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300">
-                            <span class="ml-3 text-gray-700 font-medium">Sim, estarei lá com alegria!</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="presenca" value="Não" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300">
-                            <span class="ml-3 text-gray-700 font-medium">Não, infelizmente não poderei ir.</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Você gostaria de enviar um Pix para o casal?</label>
-                    <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="doacao_pix" value="Sim" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.remove('hidden')">
-                            <span class="ml-3 text-gray-700 font-medium">Sim, com certeza!</span>
-                        </label>
-                        <label class="flex items-center cursor-pointer">
-                            <input type="radio" name="doacao_pix" value="Não" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.add('hidden')" checked>
-                            <span class="ml-3 text-gray-700 font-medium">Agora não</span>
-                        </label>
+                <div class="flex flex-col md:flex-row justify-center gap-12 md:gap-24 mb-16">
+                    <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="w-16 h-16 mx-auto bg-wedding-rose text-white rounded-full flex items-center justify-center mb-6 shadow-md">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"></path></svg>
+                        </div>
+                        <h4 class="text-3xl font-serif mb-4 text-gray-800">A Cerimônia</h4>
+                        <p class="font-bold text-lg mb-4 text-wedding-rose">12 de Dezembro de 2026, às 16:00</p>
+                        <p class="text-gray-700 text-lg mb-1 font-medium">Igreja Batista Casa de Oração</p>
+                        <p class="text-gray-600 mb-1">Cerimônia no 1º Andar</p>
+                        <p class="text-gray-500 mt-4">Rua São Cristóvão, 31<br>Bairro Liberdade - BA</p>
                     </div>
                     
-                    <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose rounded-xl bg-yellow-50">
-                        <p class="text-sm text-gray-700 mb-4 font-medium">Escaneie o QR Code abaixo ou use a nossa chave PIX:<br><strong class="text-lg">71992500268</strong></p>
-                        <!-- AQUI: pix.png -->
-                        <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-lg rounded-xl object-cover bg-white">
-                        <p class="text-xs text-gray-500 mt-4">Agradecemos de coração pelo carinho!</p>
+                    <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm border border-gray-100">
+                        <div class="w-16 h-16 mx-auto bg-wedding-rose text-white rounded-full flex items-center justify-center mb-6 shadow-md">
+                            <svg class="w-8 h-8 animate-pulse-slow fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <h4 class="text-3xl font-serif mb-4 text-gray-800">A Recepção</h4>
+                        <p class="font-bold text-lg mb-4 text-wedding-rose">Logo após a cerimônia</p>
+                        <p class="text-gray-700 text-lg mb-1 font-medium">Salão de Eventos</p>
+                        <p class="text-gray-600 mb-1">Localizado no Térreo</p>
+                        <p class="text-gray-500 mt-4">No mesmo endereço da Igreja</p>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Alguma restrição alimentar ou mensagem aos noivos?</label>
-                    <textarea name="mensagem" rows="3" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-wedding-rose focus:border-transparent outline-none transition text-gray-700" placeholder="Deixe seu recado aqui..."></textarea>
+                <div class="max-w-4xl mx-auto bg-wedding-bg p-4 rounded-3xl shadow-sm border border-gray-100">
+                    <iframe class="w-full h-80 rounded-2xl" src="https://maps.google.com/maps?q=Igreja%20Batista%20Casa%20de%20Ora%C3%A7%C3%A3o%2C%20R.%20S%C3%A3o%20Crist%C3%B3v%C3%A3o%2C%2031%20-%20Liberdade%2C%20Salvador%20-%20BA&t=&z=16&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                    <div class="mt-6 mb-2">
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=Igreja+Batista+Casa+de+Oração,+R.+São+Cristóvão,+31+-+Liberdade,+Salvador+-+BA" target="_blank" class="inline-flex items-center justify-center gap-2 bg-gray-800 text-white px-8 py-4 rounded-full hover:bg-wedding-rose transition duration-300 font-sans font-medium text-sm md:text-base shadow-md hover:scale-105 transform">
+                            Traçar Rota no GPS
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rsvp" class="py-24 px-4 bg-gray-50">
+            <div class="max-w-xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-wedding-rose"></div>
+                <h2 class="text-4xl font-serif text-center text-wedding-rose mb-3 mt-2">Confirme sua Presença</h2>
+                <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Novembro de 2026</p>
+                
+                <div id="no-name-warning" class="hidden text-center p-8 bg-yellow-50 border border-yellow-200 rounded-2xl mb-8">
+                    <svg class="w-12 h-12 text-yellow-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <p class="text-yellow-800 text-lg font-medium">Para confirmar sua presença, por favor acesse utilizando o link personalizado que enviamos para você no WhatsApp.</p>
                 </div>
 
-                <button type="submit" id="submit-btn" class="w-full bg-wedding-rose text-white font-serif text-xl py-5 rounded-xl hover:bg-yellow-600 transition duration-300 shadow-lg mt-4 flex justify-center items-center">
-                    <span id="btn-text">Confirmar Presença</span>
-                </button>
-            </form>
-            
-            <!-- Mensagens de Feedback -->
-            <div id="form-success" class="hidden text-center mt-8 p-8 bg-green-50 border border-green-100 rounded-2xl">
-                <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                <form id="rsvp-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                        <input type="text" name="nome" id="form-name" readonly required class="w-full px-5 py-4 bg-gray-200 border border-gray-300 rounded-xl focus:outline-none cursor-not-allowed text-gray-600 font-semibold">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Você poderá comparecer?</label>
+                        <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="presenca" value="Sim" required class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300">
+                                <span class="ml-3 text-gray-700 font-medium">Sim, estarei lá com alegria!</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="presenca" value="Não" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300">
+                                <span class="ml-3 text-gray-700 font-medium">Não, infelizmente não poderei ir.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Você gostaria de enviar um Pix para o casal?</label>
+                        <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="doacao_pix" value="Sim" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.remove('hidden')">
+                                <span class="ml-3 text-gray-700 font-medium">Sim, com certeza!</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="doacao_pix" value="Não" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.add('hidden')" checked>
+                                <span class="ml-3 text-gray-700 font-medium">Agora não</span>
+                            </label>
+                        </div>
+                        
+                        <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose rounded-xl bg-red-50/50">
+                            <p class="text-sm text-gray-700 mb-3 font-medium">Escaneie o QR Code abaixo ou copie a nossa chave PIX:</p>
+                            
+                            <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-md rounded-xl object-cover bg-white mb-4">
+                            
+                            <div class="flex items-center justify-center gap-2 bg-white px-4 py-2 border border-gray-200 rounded-lg w-fit mx-auto shadow-sm">
+                                <span class="text-lg font-bold text-gray-800 tracking-wider" id="pix-key">71992500268</span>
+                                <button type="button" onclick="copiarChavePix()" class="bg-gray-100 hover:bg-wedding-rose hover:text-white text-gray-600 px-3 py-1.5 rounded-md text-sm font-medium transition duration-300 flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    Copiar
+                                </button>
+                            </div>
+                            <p id="pix-msg" class="text-green-600 text-sm font-medium mt-2 opacity-0 transition-opacity duration-300">Chave copiada com sucesso!</p>
+                            
+                            <p class="text-xs text-gray-500 mt-2">Agradecemos de coração pelo carinho!</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Alguma restrição alimentar ou mensagem aos noivos?</label>
+                        <textarea name="mensagem" rows="3" class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-wedding-rose outline-none transition text-gray-700" placeholder="Deixe seu recado aqui..."></textarea>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="w-full bg-wedding-rose text-white font-serif text-xl py-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-wedding-rose/50 mt-4 flex justify-center items-center relative overflow-hidden group">
+                        <span class="absolute inset-0 w-full h-full bg-white/20 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity"></span>
+                        <span id="btn-text" class="relative z-10">Confirmar Presença</span>
+                    </button>
+                </form>
+                
+                <div id="form-success" class="hidden mt-8 p-8 bg-green-50 border border-green-100 rounded-2xl"></div>
+                <div id="form-error" class="hidden text-center mt-8 p-6 bg-red-50 border border-red-100 rounded-2xl">
+                    <p class="text-red-600 font-medium">Ops! Ocorreu um erro ao enviar. Tente novamente.</p>
                 </div>
-                <h3 class="text-2xl font-serif text-green-800 mb-2">Obrigado!</h3>
-                <p class="text-green-700">Sua resposta foi registrada com sucesso.</p>
             </div>
+        </section>
 
-            <div id="form-error" class="hidden text-center mt-8 p-6 bg-red-50 border border-red-100 rounded-2xl">
-                <p class="text-red-600">Ops! Ocorreu um erro ao enviar. Tente novamente mais tarde.</p>
-            </div>
-        </div>
-    </section>
+        <footer class="bg-gray-900 text-white text-center py-12">
+            <!-- Fonte Pinyon Script e nomes invertidos no rodapé também -->
+            <h2 class="text-6xl font-pinyon mb-4 text-wedding-rose">Rafael & Amanda</h2>
+            <p class="text-gray-400 mb-2">12.12.2026 • Salvador, BA</p>
+        </footer>
+    </div>
 
-    <!-- Rodapé -->
-    <footer class="bg-gray-900 text-white text-center py-12">
-        <h2 class="text-4xl font-serif mb-4 text-wedding-rose">Amanda & Rafael</h2>
-        <p class="text-gray-400 mb-2">12.12.2026 • Salvador, BA</p>
-        <p class="text-xs text-gray-500 mt-8">Criado com amor para o nosso grande dia.</p>
-    </footer>
-
-    <!-- Lógica JavaScript -->
     <script>
+        window.copiarChavePix = function() {
+            navigator.clipboard.writeText("71992500268").then(() => {
+                const msg = document.getElementById('pix-msg');
+                msg.classList.remove('opacity-0');
+                setTimeout(() => msg.classList.add('opacity-0'), 3000);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             
-            // Lembre-se de colar a sua URL correta do Google Script aqui!
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec';
+            // COLE SUA URL DO GOOGLE SCRIPT AQUI
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxjeSG-rR-CAcndPvd71Pv4SAdx7kS_o1eldc2FaHnE-iILDgM1B_cSXcWPeZBDoAT8/exec';
+
+            const instructionOverlay = document.getElementById('instruction-overlay');
+            const closeInstructionBtn = document.getElementById('close-instruction-btn');
+            const overlay = document.getElementById('envelope-overlay');
+            const openBtn = document.getElementById('open-btn');
+            
+            // Fecha a janela de instruções
+            closeInstructionBtn.addEventListener('click', () => {
+                instructionOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    instructionOverlay.style.display = 'none';
+                }, 500); // Aguarda o tempo da animação (0.5s)
+            });
+
+            // Abre o envelope
+            openBtn.addEventListener('click', () => {
+                overlay.classList.add('-translate-y-full');
+                document.body.style.overflow = 'auto';
+                
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1500);
+            });
 
             const urlParams = new URLSearchParams(window.location.search);
             const nomeConvidado = urlParams.get('nome');
             const form = document.getElementById('rsvp-form');
+            const successDiv = document.getElementById('form-success');
             
+            const gerarTelaSucesso = (nome, numero) => {
+                let html = `
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-wedding-rose text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-serif text-gray-800 mb-2">Presença Confirmada!</h3>
+                        <p class="text-gray-600 text-lg mb-6"><b>${nome}</b>, obrigado por confirmar. Estamos te esperando!</p>
+                    </div>
+                `;
+                
+                if (numero) {
+                    html += `
+                        <div class="mt-6 golden-ticket p-6 text-center rounded-xl shadow-md">
+                            <p class="text-sm font-bold text-gray-600 uppercase tracking-widest mb-1">Seu Número da Sorte</p>
+                            <p class="text-gray-500 text-xs mb-3">Guarde este número para o sorteio especial!</p>
+                            <div class="text-5xl font-serif text-wedding-rose font-bold py-2">
+                                #${numero}
+                            </div>
+                        </div>
+                    `;
+                }
+                return html;
+            };
+
             if (nomeConvidado) {
                 document.getElementById('guest-name').innerText = nomeConvidado;
                 document.getElementById('guest-greeting').classList.remove('hidden');
@@ -292,31 +407,23 @@
                 const formNameInput = document.getElementById('form-name');
                 if(formNameInput) formNameInput.value = nomeConvidado;
 
-                if (scriptURL !== 'https://script.google.com/macros/s/AKfycbweH7nhfz0jTp95gDz-ubliiCuIZsBE0CdDuN1bN2cqwKN3eM31J_5eFUfmEYSWTWxh/exec') {
+                if (scriptURL !== 'https://script.google.com/macros/s/AKfycbxjeSG-rR-CAcndPvd71Pv4SAdx7kS_o1eldc2FaHnE-iILDgM1B_cSXcWPeZBDoAT8/exec') {
                     fetch(scriptURL + "?nome=" + encodeURIComponent(nomeConvidado))
                         .then(response => response.json())
                         .then(data => {
                             if (data.encontrado && data.status === "Confirmado") {
                                 form.classList.add('hidden');
-                                const successDiv = document.getElementById('form-success');
                                 successDiv.classList.remove('hidden');
-                                successDiv.innerHTML = `
-                                    <div class="w-16 h-16 bg-wedding-rose text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    </div>
-                                    <h3 class="text-2xl font-serif text-gray-800 mb-2">Presença Confirmada!</h3>
-                                    <p class="text-gray-600 text-lg"><b>${nomeConvidado}</b>, você já confirmou sua presença anteriormente. Estamos muito felizes e te esperamos lá!</p>
-                                `;
+                                successDiv.innerHTML = gerarTelaSucesso(nomeConvidado, data.numeroSorteio);
                             }
                         })
-                        .catch(err => console.log("Verificação falhou", err));
+                        .catch(err => console.log("Erro", err));
                 }
             } else {
                 form.classList.add('hidden');
                 document.getElementById('no-name-warning').classList.remove('hidden');
             }
 
-            // Contador
             const dataCasamento = new Date(2026, 11, 12, 16, 0, 0).getTime();
             const atualizarContador = setInterval(() => {
                 const agora = new Date().getTime();
@@ -325,31 +432,31 @@
                     document.getElementById('dias').innerText = Math.floor(diferenca / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
                     document.getElementById('horas').innerText = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
                     document.getElementById('minutos').innerText = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                    document.getElementById('segundos').innerText = Math.floor((diferenca % (1000 * 60)) / 1000).toString().padStart(2, '0');
                 } else {
                     clearInterval(atualizarContador);
-                    document.getElementById('countdown').innerHTML = "<span class='text-4xl font-serif text-wedding-rose'>Chegou o grande dia!</span>";
                 }
             }, 1000);
 
-            // Envio do Form
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
-            const formSuccess = document.getElementById('form-success');
             const formError = document.getElementById('form-error');
 
             form.addEventListener('submit', e => {
                 e.preventDefault();
                 submitBtn.disabled = true;
                 submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-                btnText.innerHTML = '<span class="loading-spinner"></span> Enviando...';
+                btnText.innerHTML = '<span class="loading-spinner"></span> Registrando...';
 
-                const formData = new FormData(form);
-                fetch(scriptURL, { method: 'POST', body: formData, mode: 'no-cors' })
-                .then(() => {
+                fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+                .then(response => response.json())
+                .then(data => {
                     form.classList.add('hidden'); 
-                    formSuccess.classList.remove('hidden'); 
+                    successDiv.classList.remove('hidden'); 
+                    const numero = (new FormData(form).get('presenca') === "Sim") ? data.numeroSorteio : null;
+                    successDiv.innerHTML = gerarTelaSucesso(nomeConvidado, numero);
                 })
-                .catch(() => {
+                .catch(err => {
                     formError.classList.remove('hidden'); 
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
