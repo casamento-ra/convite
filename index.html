@@ -105,6 +105,13 @@
         .animate-breathe {
             animation: breathe 5s ease-in-out infinite;
         }
+        @keyframes fillBar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .animate-fill-bar {
+            animation: fillBar 3s linear forwards;
+        }
         .polaroid {
             background: white;
             padding: 12px 12px 35px 12px;
@@ -560,28 +567,21 @@
                     setTimeout(() => {
                         successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         
-                        // Trava a tela (body e documentElement garantem que funcione no iPhone/Android)
+                        // Trava a tela 
                         document.body.style.overflow = 'hidden'; 
                         document.documentElement.style.overflow = 'hidden'; 
                         
-                        // Animação da barra de progresso (timer visual)
+                        // Animação da barra de progresso nativa via CSS
                         const progressBar = document.getElementById('rsvp-progress-bar');
                         if (progressBar) {
-                            progressBar.style.transition = 'none'; // Tira a animação
-                            progressBar.style.width = '0%'; // Zera a barra
-                            
-                            // Força o navegador a reconhecer a barra zerada antes de animar
-                            void progressBar.offsetWidth;
-                            
-                            // Inicia o preenchimento de 3 segundos
-                            progressBar.style.transition = 'width 3s linear';
-                            progressBar.style.width = '100%';
+                            progressBar.classList.remove('w-full');
+                            progressBar.classList.add('animate-fill-bar');
                         }
                         
-                        // Libera a tela após 3 segundos
+                        // Libera a tela após 3 segundos forçando o 'auto' para não voltar ao bloqueio do envelope inicial
                         setTimeout(() => {
-                            document.body.style.overflow = ''; 
-                            document.documentElement.style.overflow = '';
+                            document.body.style.overflow = 'auto'; 
+                            document.documentElement.style.overflow = 'auto';
                         }, 3000);
                     }, 100);
                 })
