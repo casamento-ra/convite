@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Adicionei a fonte Pinyon Script aqui na importação do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
     
     <script>
@@ -23,7 +22,7 @@
                     fontFamily: {
                         'serif': ['"Playfair Display"', 'serif'],
                         'sans': ['"Lora"', 'serif'],
-                        'pinyon': ['"Pinyon Script"', 'cursive'] // Nova fonte configurada
+                        'pinyon': ['"Pinyon Script"', 'cursive']
                     }
                 }
             }
@@ -92,7 +91,6 @@
         .golden-ticket::before { left: -10px; border-right: 2px dashed #d28781; }
         .golden-ticket::after { right: -10px; border-left: 2px dashed #d28781; }
 
-        /* Novas animações e estilos para as fotos */
         @keyframes pulse-slow {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
@@ -113,7 +111,12 @@
         }
     </style>
 </head>
-<body class="bg-wedding-bg text-wedding-text font-sans antialiased">
+<body class="bg-wedding-bg text-wedding-text font-sans antialiased relative">
+
+    <!-- BOTÃO VOLTAR AO TOPO -->
+    <button id="backToTopBtn" class="fixed bottom-6 right-6 z-40 bg-wedding-rose text-white p-3 rounded-full shadow-lg opacity-0 translate-y-10 pointer-events-none transition-all duration-300 hover:scale-110 hover:shadow-xl focus:outline-none" aria-label="Voltar ao topo">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+    </button>
 
     <!-- INSTRUÇÃO INICIAL -->
     <div id="instruction-overlay" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-500 px-4">
@@ -122,7 +125,14 @@
                 <svg class="w-8 h-8 text-wedding-rose" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
             </div>
             <h3 class="text-3xl font-serif text-wedding-rose mb-3">Seu convite chegou!</h3>
-            <p class="text-gray-600 text-lg mb-8">Para abrir, toque no laço do envelope na próxima tela.</p>
+            <p class="text-gray-600 text-lg mb-6">Para abrir, toque no laço do envelope na próxima tela.</p>
+            
+            <div class="bg-wedding-bg rounded-xl p-3 mb-8 border border-wedding-rose/20">
+                <p class="text-sm text-gray-700 italic">
+                    <span class="font-bold text-wedding-rose">Dica:</span> Ao entrar, deslize a tela para conferir a <b class="font-serif">Programação</b> e <b class="font-serif">Recomendações</b> do nosso evento!
+                </p>
+            </div>
+
             <button id="close-instruction-btn" class="w-full bg-wedding-rose text-white px-8 py-4 rounded-xl hover:opacity-90 transition duration-300 font-serif text-xl shadow-lg hover:scale-105 transform">
                 Entendi
             </button>
@@ -132,14 +142,12 @@
     <!-- CARTA / ENVELOPE INICIAL -->
     <div id="envelope-overlay" class="fixed inset-0 z-50 flex items-center justify-center transition-transform duration-[1500ms] ease-in-out bg-wedding-bg">
         <div class="absolute inset-0 envelope-bg"></div>
-        
-        <!-- Botão invisível ocupando a metade de baixo da tela -->
         <button id="open-btn" class="absolute bottom-0 w-full h-1/2 cursor-pointer z-10" aria-label="Abrir convite"></button>
     </div>
 
     <!-- CONTEÚDO DO SITE -->
     <div id="main-content">
-        <header class="h-screen w-full bg-hero flex flex-col items-center justify-center text-center text-white px-4">
+        <header id="inicio" class="h-screen w-full bg-hero flex flex-col items-center justify-center text-center text-white px-4">
             <div class="fade-in">
                 <div id="guest-greeting" class="hidden mb-6">
                     <p class="text-xl md:text-2xl font-light italic opacity-90">Com muita alegria, convidamos</p>
@@ -147,18 +155,32 @@
                 </div>
                 
                 <p id="default-greeting" class="text-lg tracking-widest uppercase mb-4">Para celebrar o casamento de</p>
-                <!-- Fonte Pinyon Script aplicada aqui e nomes invertidos -->
                 <h1 class="text-7xl md:text-9xl font-pinyon mb-6 drop-shadow-lg">Rafael e Amanda</h1>
                 <p class="text-2xl md:text-6xl italic mb-8 font-serif text-wedding-rose drop-shadow-md">12 de Dezembro de 2026</p>
                 
-                <div class="flex flex-col items-center gap-5 mt-4">
+                <!-- Grupo de Botões -->
+                <div class="flex flex-col items-center gap-4 mt-4">
                     <a href="#rsvp" class="inline-block bg-wedding-rose text-white px-10 py-4 rounded-full hover:opacity-90 transition duration-300 font-serif text-xl shadow-xl hover:scale-105 transform">
                         Confirmar Presença
                     </a>
                     
-                    <a href="#local" class="inline-flex items-center gap-2 text-white/90 hover:text-white hover:text-wedding-rose transition duration-300 font-sans font-medium text-sm tracking-wide group">
+                    <a href="#local" class="inline-flex items-center gap-2 text-white/90 hover:text-white hover:text-wedding-rose transition duration-300 font-sans font-medium text-sm tracking-wide group mt-2">
                         Ver local da cerimônia
-                        <svg class="w-4 h-4 animate-bounce mt-1 text-wedding-rose group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 mt-0.5 text-wedding-rose group-hover:text-white group-hover:translate-y-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+
+                    <a href="#programacao" class="inline-flex items-center gap-2 text-white/90 hover:text-white hover:text-wedding-rose transition duration-300 font-sans font-medium text-sm tracking-wide group mt-1">
+                        Ver programação do evento
+                        <svg class="w-4 h-4 mt-0.5 text-wedding-rose group-hover:text-white group-hover:translate-y-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                        </svg>
+                    </a>
+
+                    <a href="#recomendacoes" class="inline-flex items-center gap-2 text-white/90 hover:text-white hover:text-wedding-rose transition duration-300 font-sans font-medium text-sm tracking-wide group mt-1">
+                        Ver recomendações
+                        <svg class="w-4 h-4 mt-0.5 text-wedding-rose group-hover:text-white group-hover:translate-y-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                         </svg>
                     </a>
@@ -198,7 +220,7 @@
                     <img src="foto1.jpg" alt="Casal Foto 1" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
                 </div>
                 <div class="polaroid transform rotate-2 mt-4 md:mt-0">
-                    <img src="foto4.jpg" alt="Casal Foto 2" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
+                    <img src="foto2.jpg" alt="Casal Foto 2" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
                 </div>
                 <div class="polaroid transform -rotate-1 mt-4 md:mt-0">
                     <img src="foto3.jpg" alt="Casal Foto 3" class="w-full h-auto max-h-[400px] object-contain bg-gray-50 rounded-sm">
@@ -206,9 +228,20 @@
             </div>
         </section>
 
+        <!-- NOVA SEÇÃO: PROGRAMAÇÃO -->
+        <section id="programacao" class="bg-gray-50 py-24 px-4 border-t border-gray-100">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-6xl md:text-6xl font-pinyon text-wedding-rose mb-12">Programação do Evento</h2>
+                <picture class="w-full flex justify-center">
+                    <source media="(min-width: 768px)" srcset="programacao-pc.jpg">
+                    <img src="programacao-mobile.jpg" alt="Programação do Casamento" class="max-w-full rounded-2xl shadow-xl border-4 border-white">
+                </picture>
+            </div>
+        </section>
+
         <section id="local" class="bg-white py-24 px-4 border-t border-gray-100">
             <div class="max-w-5xl mx-auto text-center">
-                <h2 class="text-4xl md:text-5xl font-serif text-wedding-rose mb-16">Quando & Onde</h2>
+                <h2 class="text-6xl md:text-7xl font-pinyon text-wedding-rose mb-16">Quando e Onde</h2>
                 
                 <div class="flex flex-col md:flex-row justify-center gap-12 md:gap-24 mb-16">
                     <div class="flex-1 bg-wedding-bg p-8 rounded-2xl shadow-sm border border-gray-100">
@@ -245,11 +278,22 @@
             </div>
         </section>
 
-        <section id="rsvp" class="py-24 px-4 bg-gray-50">
+        <!-- NOVA SEÇÃO: RECOMENDAÇÕES -->
+        <section id="recomendacoes" class="bg-wedding-bg py-24 px-4 border-t border-gray-100">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-6xl md:text-6xl font-pinyon text-wedding-rose mb-12">Recomendações</h2>
+                <picture class="w-full flex justify-center">
+                    <source media="(min-width: 768px)" srcset="recomendacoes-pc.jpg">
+                    <img src="recomendacoes-mobile.jpg" alt="Recomendações do Casamento" class="max-w-full rounded-2xl shadow-xl border-4 border-white">
+                </picture>
+            </div>
+        </section>
+
+        <section id="rsvp" class="py-24 px-4 bg-gray-50 border-t border-gray-100">
             <div class="max-w-xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-2 bg-wedding-rose"></div>
                 <h2 class="text-4xl font-serif text-center text-wedding-rose mb-3 mt-2">Confirme sua Presença</h2>
-                <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Novembro de 2026</p>
+                <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Dezembro de 2026</p>
                 
                 <div id="no-name-warning" class="hidden text-center p-8 bg-yellow-50 border border-yellow-200 rounded-2xl mb-8">
                     <svg class="w-12 h-12 text-yellow-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
@@ -276,32 +320,34 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Você gostaria de enviar um Pix para o casal?</label>
-                        <div class="space-y-3 mt-2 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                    <div class="p-6 bg-gradient-to-br from-wedding-rose/5 to-wedding-rose/10 border border-wedding-rose/30 rounded-2xl shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-wedding-rose/10 rounded-bl-full -z-0"></div>
+                        
+                        <label class="block text-base font-bold text-wedding-rose mb-3 relative z-10">Você gostaria de presentear o casal com um Pix?</label>
+                        <div class="space-y-3 mt-2 bg-white/60 p-4 rounded-xl border border-wedding-rose/20 relative z-10 backdrop-blur-sm">
                             <label class="flex items-center cursor-pointer">
                                 <input type="radio" name="doacao_pix" value="Sim" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.remove('hidden')">
-                                <span class="ml-3 text-gray-700 font-medium">Sim, com certeza!</span>
+                                <span class="ml-3 text-gray-800 font-medium">Sim, com certeza!</span>
                             </label>
                             <label class="flex items-center cursor-pointer">
                                 <input type="radio" name="doacao_pix" value="Não" class="w-5 h-5 text-wedding-rose focus:ring-wedding-rose border-gray-300" onchange="document.getElementById('pix-container').classList.add('hidden')" checked>
-                                <span class="ml-3 text-gray-700 font-medium">Agora não</span>
+                                <span class="ml-3 text-gray-600 font-medium">Agora não</span>
                             </label>
                         </div>
                         
-                        <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose rounded-xl bg-red-50/50">
+                        <div id="pix-container" class="hidden mt-4 text-center p-6 border border-wedding-rose bg-white rounded-xl shadow-inner relative z-10">
                             <p class="text-sm text-gray-700 mb-3 font-medium">Escaneie o QR Code abaixo ou copie a nossa chave PIX:</p>
                             
                             <img src="pix.png" alt="QR Code PIX do Casal" class="w-48 h-48 mx-auto border-4 border-white shadow-md rounded-xl object-cover bg-white mb-4">
                             
-                            <div class="flex items-center justify-center gap-2 bg-white px-4 py-2 border border-gray-200 rounded-lg w-fit mx-auto shadow-sm">
+                            <div class="flex items-center justify-center gap-2 bg-gray-50 px-4 py-2 border border-gray-200 rounded-lg w-fit mx-auto shadow-sm">
                                 <span class="text-lg font-bold text-gray-800 tracking-wider" id="pix-key">71992500268</span>
-                                <button type="button" onclick="copiarChavePix()" class="bg-gray-100 hover:bg-wedding-rose hover:text-white text-gray-600 px-3 py-1.5 rounded-md text-sm font-medium transition duration-300 flex items-center gap-1">
+                                <button type="button" onclick="copiarChavePix()" class="bg-wedding-rose/10 hover:bg-wedding-rose hover:text-white text-wedding-rose px-3 py-1.5 rounded-md text-sm font-bold transition duration-300 flex items-center gap-1">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                                     Copiar
                                 </button>
                             </div>
-                            <p id="pix-msg" class="text-green-600 text-sm font-medium mt-2 opacity-0 transition-opacity duration-300">Chave copiada com sucesso!</p>
+                            <p id="pix-msg" class="text-green-600 text-sm font-bold mt-2 opacity-0 transition-opacity duration-300">Chave copiada com sucesso!</p>
                             
                             <p class="text-xs text-gray-500 mt-2">Agradecemos de coração pelo carinho!</p>
                         </div>
@@ -326,13 +372,13 @@
         </section>
 
         <footer class="bg-gray-900 text-white text-center py-12">
-            <!-- Fonte Pinyon Script e nomes invertidos no rodapé também -->
             <h2 class="text-6xl font-pinyon mb-4 text-wedding-rose">Rafael & Amanda</h2>
             <p class="text-gray-400 mb-2">12.12.2026 • Salvador, BA</p>
         </footer>
     </div>
 
     <script>
+        // Função do PIX
         window.copiarChavePix = function() {
             navigator.clipboard.writeText("71992500268").then(() => {
                 const msg = document.getElementById('pix-msg');
@@ -343,32 +389,48 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             
-            // COLE SUA URL DO GOOGLE SCRIPT AQUI
+            // COLE SUA URL DO GOOGLE SCRIPT AQUI (linha abaixo)
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxjeSG-rR-CAcndPvd71Pv4SAdx7kS_o1eldc2FaHnE-iILDgM1B_cSXcWPeZBDoAT8/exec';
 
+            // Lógica do Envelope inicial
             const instructionOverlay = document.getElementById('instruction-overlay');
             const closeInstructionBtn = document.getElementById('close-instruction-btn');
             const overlay = document.getElementById('envelope-overlay');
             const openBtn = document.getElementById('open-btn');
             
-            // Fecha a janela de instruções
             closeInstructionBtn.addEventListener('click', () => {
                 instructionOverlay.style.opacity = '0';
                 setTimeout(() => {
                     instructionOverlay.style.display = 'none';
-                }, 500); // Aguarda o tempo da animação (0.5s)
+                }, 500);
             });
 
-            // Abre o envelope
             openBtn.addEventListener('click', () => {
                 overlay.classList.add('-translate-y-full');
                 document.body.style.overflow = 'auto';
-                
                 setTimeout(() => {
                     overlay.style.display = 'none';
                 }, 1500);
             });
 
+            // Lógica do Botão Voltar ao Topo
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                } else {
+                    backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Lógica do Formulário
             const urlParams = new URLSearchParams(window.location.search);
             const nomeConvidado = urlParams.get('nome');
             const form = document.getElementById('rsvp-form');
@@ -424,6 +486,7 @@
                 document.getElementById('no-name-warning').classList.remove('hidden');
             }
 
+            // Lógica do Contador
             const dataCasamento = new Date(2026, 11, 12, 16, 0, 0).getTime();
             const atualizarContador = setInterval(() => {
                 const agora = new Date().getTime();
@@ -438,6 +501,7 @@
                 }
             }, 1000);
 
+            // Submissão do Formulário
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
             const formError = document.getElementById('form-error');
