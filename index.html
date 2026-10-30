@@ -298,9 +298,11 @@
 
         <section id="rsvp" class="py-24 px-4 bg-gray-50 border-t border-gray-100">
             <div class="max-w-xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-gray-100 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-2 bg-wedding-rose"></div>
+                <div class="absolute top-0 left-0 w-full h-2 bg-wedding-rose/20">
+                    <div id="rsvp-progress-bar" class="h-full bg-wedding-rose w-full"></div>
+                </div>
                 <h2 class="text-4xl font-serif text-center text-wedding-rose mb-3 mt-2">Confirme sua Presença</h2>
-                <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Novembro de 2026</p>
+                <p class="text-center text-gray-500 mb-10 text-lg">Por favor, responda até 12 de Dezembro de 2026</p>
                 
                 <div id="no-name-warning" class="hidden text-center p-8 bg-yellow-50 border border-yellow-200 rounded-2xl mb-8">
                     <svg class="w-12 h-12 text-yellow-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
@@ -554,14 +556,33 @@
                     const numero = statusRSVP === "Confirmado" ? data.numeroSorteio : null;
                     successDiv.innerHTML = gerarTelaSucesso(nomeConvidado, numero, statusRSVP);
                     
-                    // Centraliza na tela e trava o scroll por 2 segundos para a pessoa ler
+                    // Centraliza na tela e trava o scroll por 3 segundos para a pessoa ler
                     setTimeout(() => {
                         successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        document.body.style.overflow = 'hidden'; // Trava a tela
                         
+                        // Trava a tela (body e documentElement garantem que funcione no iPhone/Android)
+                        document.body.style.overflow = 'hidden'; 
+                        document.documentElement.style.overflow = 'hidden'; 
+                        
+                        // Animação da barra de progresso (timer visual)
+                        const progressBar = document.getElementById('rsvp-progress-bar');
+                        if (progressBar) {
+                            progressBar.style.transition = 'none'; // Tira a animação
+                            progressBar.style.width = '0%'; // Zera a barra
+                            
+                            // Força o navegador a reconhecer a barra zerada antes de animar
+                            void progressBar.offsetWidth;
+                            
+                            // Inicia o preenchimento de 3 segundos
+                            progressBar.style.transition = 'width 3s linear';
+                            progressBar.style.width = '100%';
+                        }
+                        
+                        // Libera a tela após 3 segundos
                         setTimeout(() => {
-                            document.body.style.overflow = ''; // Libera a tela após 2s
-                        }, 2000);
+                            document.body.style.overflow = ''; 
+                            document.documentElement.style.overflow = '';
+                        }, 3000);
                     }, 100);
                 })
                 .catch(err => {
